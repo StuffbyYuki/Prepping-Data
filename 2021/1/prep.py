@@ -1,7 +1,9 @@
-from os import path
+# Prepping data 2021 week1
+# To run program: python 2021/1/prep.py
+# Author: Yuki Kakegawa
+
 import pandas as pd
 import numpy as np
-from pandas.core.indexes.datetimes import DatetimeIndex
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', 20)
 
