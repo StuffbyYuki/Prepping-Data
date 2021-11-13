@@ -1,4 +1,4 @@
-# Prepping data 2021 week1
+# Prepping data 2021 week1: https://preppindata.blogspot.com/2021/01/2021-week-1.html
 # To run program: python 2021/1/prep.py
 # Author: Yuki Kakegawa
 
