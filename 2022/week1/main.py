@@ -1,12 +1,11 @@
-import os
+import pandas as pd
+from config import FILE_URL
 
-#USE ONLY ONE OF THESE:
+# read data
+df = pd.read_csv(FILE_URL)
 
-os.environ["MODIN_ENGINE"] = "ray"  # Modin will use Ray
-os.environ["MODIN_ENGINE"] = "dask"  # Modin will use Dask
-
-import modin.pandas as pd
-
-df = pd.read_csv('https://drive.google.com/file/d/1p8gt3cR3ATCeGK81pnT90x0a6dbCXst1/view')
+# add a concat name column
+df['Pupil Full Name'] = df['pupil last name'] + ', ' + df['pupil first name']
+df.drop(columns=['pupil last name', 'pupil first name'], inplace=True)
 
 print(df.head())
