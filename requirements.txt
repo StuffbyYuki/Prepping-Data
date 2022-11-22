@@ -21,6 +21,8 @@ charset-normalizer==2.1.1
 click==8.0.4
 cloudpickle==2.2.0
 colorful==0.5.4
+contourpy==1.0.6
+cycler==0.11.0
 dask==2022.11.1
 debugpy==1.6.3
 decorator==5.1.1
@@ -31,6 +33,7 @@ entrypoints==0.4
 executing==1.2.0
 fastjsonschema==2.16.2
 filelock==3.8.0
+fonttools==4.38.0
 frozenlist==1.3.3
 fsspec==2022.11.0
 google-api-core==2.10.2
@@ -57,8 +60,10 @@ jupyter-server==1.23.2
 jupyter_core==5.0.0
 jupyterlab-pygments==0.2.2
 jupyterlab-widgets==3.0.3
+kiwisolver==1.4.4
 locket==1.0.0
 MarkupSafe==2.1.1
+matplotlib==3.6.2
 matplotlib-inline==0.1.6
 mistune==2.0.4
 modin==0.17.0
@@ -83,6 +88,7 @@ parso==0.8.3
 partd==1.3.0
 pexpect==4.8.0
 pickleshare==0.7.5
+Pillow==9.3.0
 pkgutil_resolve_name==1.3.10
 platformdirs==2.5.4
 plumbum==1.8.0
@@ -113,6 +119,7 @@ requests==2.28.1
 rpyc==4.1.5
 rsa==4.9
 s3transfer==0.6.0
+seaborn==0.12.1
 Send2Trash==1.8.0
 six==1.16.0
 smart-open==6.2.0

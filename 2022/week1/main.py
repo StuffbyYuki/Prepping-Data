@@ -1,5 +1,4 @@
 import pandas as pd
-from config import FILE_URL
 import numpy as np
 
 # read data
