@@ -19,9 +19,9 @@ df['Pupil Full Name'] = df['pupil first name'] + ' ' + df['pupil last name']
 current_year = datetime.now().year
 df['This Year\'s Birthday'] = (    
     pd.to_datetime(df['Date of Birth']).dt.to_period('D').dt.to_timestamp() + pd.DateOffset(year=current_year)
-    # datetime.utcfromtimestamp(pd.to_datetime(df['Date of Birth'])).replace(year=current_year)
-    # datetime.date(df['Date of Birth']).replace(year=current_year)
 )
+
+print(df.head())
 
 # birthday month
 df['Month'] = df['This Year\'s Birthday'].dt.month_name()
@@ -38,7 +38,6 @@ df['Cake Needed On'] = np.where(
 grouped_by_columns = ['Cake Needed On', 'Month']
 bd_per_weekday_month_df = df.groupby(grouped_by_columns).size().reset_index(name='Birthdays per Weekday and Month') 
 df = df.merge(bd_per_weekday_month_df, on=grouped_by_columns, how='inner')
-# df.sort_values(by='Pupil Full Name')
 
 
 # select only necessary columns
@@ -46,4 +45,4 @@ columns_needed = ['Pupil Full Name', 'Date of Birth', 'This Year\'s Birthday', '
 df = df.loc[:, columns_needed].sort_values(by='Pupil Full Name')
 
 # export the output
-df.to_csv('output.csv', index=None)
+# df.to_csv('output.csv', index=None)
