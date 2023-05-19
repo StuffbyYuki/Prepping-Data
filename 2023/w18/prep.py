@@ -20,13 +20,16 @@ def clean_locations(df):
                 .str.replace_all('Livrepool', 'Liverpool', literal=True)
             ))
 
-def pivot_column(eager_df, index_columns, columns, values):
-    return (eager_df
+def pivot_column(df, index_columns, columns, values):
+    if isinstance(df, pl.LazyFrame):
+        df = df.collect()
+    return (df
             .pivot(
                 index=index_columns,
                 columns=columns,
                 values=values,
-            ))
+            )
+            .lazy())
 
 def add_revenues_column(df):
     return (df
@@ -34,22 +37,22 @@ def add_revenues_column(df):
                 (pl.col('Price (£) per pack') * pl.col('Quant per Q')).alias('Revenues')
             ))
 
+def add_revenues_and_avg_per_pack(df):
+    return (df
+            .groupby('Location')
+            .agg(
+                [
+                    pl.sum('Revenues'),
+                    pl.mean('Price (£) per pack').round(2)
+                ]
+            )
+            .sort('Location'))
+
 df = (df
       .pipe(clean_locations)
-      .collect()  # pivot only available in eager df
       .pipe(pivot_column, index_columns=['Location', 'Nut Type'], columns='Category', values='Value')
-      .lazy()
       .pipe(add_revenues_column)
-      .groupby('Location')
-      .agg(
-        [
-            pl.sum('Revenues'),
-            pl.mean('Price (£) per pack').round(2)
-        ]
-      )
-      .sort('Location')
+      .pipe(add_revenues_and_avg_per_pack)
       )
     
 print(df.collect())
-
-
