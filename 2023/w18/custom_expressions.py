@@ -6,8 +6,6 @@ class CustomStringMethodsCollection:
         self._expr = expr
 
     def to_title_case(self) -> pl.Expr:
-        '''
-        '''
         convert_to_title = (
             pl.element().str.slice(0, 1).str.to_uppercase() 
             + 
