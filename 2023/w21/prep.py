@@ -26,6 +26,7 @@ def drop_unneccary_columns(df):
     return (
         df
         .drop('grade', 'grade_type')
+        .unique()
     )
 
 def add_grade_diff(df):
@@ -40,6 +41,7 @@ def keep_only_under_perf_students(df):
     return (
         df
         .filter(pl.col('diff') < 0)
+        .sort('student_id')
     )
 
 lazy_df = pl.scan_csv(file_name)
@@ -51,10 +53,8 @@ result_df = (
     .pipe(unpivot_grades)
     .pipe(add_grade_columns)
     .pipe(drop_unneccary_columns)
-    .unique()
     .pipe(add_grade_diff)
     .pipe(keep_only_under_perf_students)
-    .sort('student_id')
-)
+).collect()
 
-print(result_df.collect().head(20))
+print(result_df)
