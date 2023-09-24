@@ -1,7 +1,7 @@
 import polars as pl
 
 
-def create_lookup_table(dim_lf: pl.LazyFrame, monthly_lf: pl.LazyFrame) -> pl.LazyFrame:
+def create_lookup_table(dim_lf: pl.LazyFrame, monthly_lf: pl.LazyFrame) -> pl.DataFrame:
     '''
     union dim and monthly data with only employee_id and guid selected
     '''
@@ -11,6 +11,7 @@ def create_lookup_table(dim_lf: pl.LazyFrame, monthly_lf: pl.LazyFrame) -> pl.La
         pl.concat([dim_id_guid_combinations, monthly_id_guid_combinations], how='vertical')
         .drop_nulls()
         .unique()
+        .collect()
     )
     
     return lookup_table
@@ -31,7 +32,7 @@ def main():
     dim_lf = pl.scan_csv('data/input/ee_dim_input.csv')
     monthly_lf = pl.scan_csv('data/input/ee_monthly_input.csv')
     
-    lookup_table = create_lookup_table()
+    lookup_table = create_lookup_table(dim_lf, monthly_lf)
     emp_lookup_dict = dict(zip(lookup_table.select('employee_id').to_series(), lookup_table.select('guid').to_series()))
     guid_lookup_dict = dict(zip(lookup_table.select('guid').to_series(), lookup_table.select('employee_id').to_series()))
 
@@ -47,3 +48,6 @@ def main():
 
     dim_null_filled_lf.sink_csv('data/output/ee_dim_output.csv')
     monthly_null_filled_lf.sink_csv('data/output/ee_monthly_output.csv')
+
+if __name__ == '__main__':
+    main()
