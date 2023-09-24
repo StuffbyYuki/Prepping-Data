@@ -16,7 +16,7 @@ def create_lookup_table(dim_lf: pl.LazyFrame, monthly_lf: pl.LazyFrame) -> pl.Da
     
     return lookup_table
 
-def fill_emp_and_guid(lf: pl.LazyFrame, guid_lookup_dict: dict, emp_lookup_dict: dict) -> pl.LazyFrame:
+def fill_emp_and_guid(lf: pl.LazyFrame, emp_lookup_dict: dict, guid_lookup_dict: dict) -> pl.LazyFrame:
     ''''
     fill employee_id and guid with a lookup dictionary
     '''
