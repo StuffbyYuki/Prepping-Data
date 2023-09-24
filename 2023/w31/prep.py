@@ -1,10 +1,9 @@
 import polars as pl
 
-dim_lf = pl.scan_csv('data/input/ee_dim_input.csv')
-monthly_lf = pl.scan_csv('data/input/ee_monthly_input.csv')
 
-def create_lookup_table():
+def create_lookup_table(dim_lf: pl.LazyFrame, monthly_lf: pl.LazyFrame) -> pl.LazyFrame:
     '''
+    union dim and monthly data with only employee_id and guid selected
     '''
     dim_id_guid_combinations = (dim_lf.select(pl.col(['employee_id', 'guid'])))
     monthly_id_guid_combinations = (monthly_lf.select(pl.col(['employee_id', 'guid'])))
@@ -12,7 +11,6 @@ def create_lookup_table():
         pl.concat([dim_id_guid_combinations, monthly_id_guid_combinations], how='vertical')
         .drop_nulls()
         .unique()
-        .collect()
     )
     
     return lookup_table
@@ -29,22 +27,13 @@ def fill_emp_and_guid(lf: pl.LazyFrame, guid_lookup_dict: dict, emp_lookup_dict:
     return res_lf
 
 def main():
+
+    dim_lf = pl.scan_csv('data/input/ee_dim_input.csv')
+    monthly_lf = pl.scan_csv('data/input/ee_monthly_input.csv')
     
     lookup_table = create_lookup_table()
-
-    emp_lookup_dict = dict(
-        zip(
-            lookup_table.select('employee_id').to_series(),
-            lookup_table.select('guid').to_series()
-        )
-    )
-
-    guid_lookup_dict = dict(
-        zip(
-            lookup_table.select('guid').to_series(),
-            lookup_table.select('employee_id').to_series()
-        )
-    )
+    emp_lookup_dict = dict(zip(lookup_table.select('employee_id').to_series(), lookup_table.select('guid').to_series()))
+    guid_lookup_dict = dict(zip(lookup_table.select('guid').to_series(), lookup_table.select('employee_id').to_series()))
 
     dim_null_filled_lf = (
         dim_lf
