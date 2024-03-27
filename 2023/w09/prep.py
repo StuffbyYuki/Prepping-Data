@@ -41,13 +41,6 @@ all_transactions_per_account = (
 
 account_summary = (
     all_transactions_per_account
-    .select(
-        'Account Number',
-        'Initial Balance',
-        'Transaction Date',
-        'Transaction Value',
-        'Transaction Type',
-    )
     .with_columns(
         pl.when(pl.col('Transaction Type') == 'incoming')
         .then(pl.col('Transaction Value'))
